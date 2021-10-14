@@ -64,7 +64,7 @@ namespace ParseCommandLineTest
             Console.WriteLine("\nInner args:");
             Console.WriteLine(sInnerArgs);
 
-            // Pass inner args to new instance of this program to test how they are parsed.
+            // Pass the inner args to a .NET and C++ program to test how they are handled.
             Assembly entryAssembly = Assembly.GetEntryAssembly();
             string currentExePath = entryAssembly.Location;
             string workingDir = Path.GetDirectoryName(currentExePath);
@@ -74,8 +74,8 @@ namespace ParseCommandLineTest
             if (sInnerArgs != null
                 && runningProcesses.Length < 10) //prevent infinite recursion madness!
             {
-                Process.Start(currentExePath, sInnerArgs);
-                Process.Start(cppExePath, sInnerArgs);
+                Process.Start(currentExePath, sInnerArgs); //.NET program
+                Process.Start(cppExePath, sInnerArgs); // C++ program
             }
             Console.WriteLine("\nPress ENTER to exit...\n");
             do
