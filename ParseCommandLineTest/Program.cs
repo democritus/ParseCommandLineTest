@@ -23,6 +23,7 @@ namespace ParseCommandLineTest
             List<string> outerArgs = new List<string>();
             string sInnerArgs = null;
 
+            Console.WriteLine(".NET app test\n");
             Console.WriteLine("All args:");
             for (int i = 0; i < args.Length; ++i)
             {
@@ -52,16 +53,19 @@ namespace ParseCommandLineTest
                 }
             }
 
+            Console.WriteLine("\nOuter args:");
+            Console.WriteLine(string.Join(" ", outerArgs));
+
+            Console.WriteLine("\nInner args:");
+            Console.WriteLine(sInnerArgs);
+
             // Replace single quotes with double quotes before passing to external process.
             if (sInnerArgs != null)
             {
                 sInnerArgs = sInnerArgs.Replace('\'', '"');
             }
 
-            Console.WriteLine("\nOuter args:");
-            Console.WriteLine(string.Join(" ", outerArgs));
-
-            Console.WriteLine("\nInner args:");
+            Console.WriteLine("\nInner args sanitized:");
             Console.WriteLine(sInnerArgs);
 
             // Pass the inner args to a .NET and C++ program to test how they are handled.

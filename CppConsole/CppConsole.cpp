@@ -2,6 +2,7 @@
 
 int main(int argc, char* argv[])
 {
+    std::cout << "C++ app test\n\n";
     std::cout << "All args:\n";
     int i;
     for (i = 0; i < argc; ++i)
