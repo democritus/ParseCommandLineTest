@@ -75,9 +75,8 @@ namespace ParseCommandLineTest
             string dotNetExePath = entryAssembly.Location;
             string workingDir = Path.GetDirectoryName(dotNetExePath);
             string cppExePath = Path.Combine(workingDir, $"{cppAssemblyName}.exe");
-            Process[] runningProcesses = Process.GetProcessesByName(dotNetAssemblyName);
             if (sInnerArgs != null
-                && runningProcesses.Length < 10) //prevent infinite recursion madness!
+                && Process.GetProcessesByName(dotNetAssemblyName).Length < 10) //prevent infinite recursion madness!
             {
                 Process.Start(dotNetExePath, sInnerArgs); //.NET program
                 Process.Start(cppExePath, sInnerArgs); // C++ program
