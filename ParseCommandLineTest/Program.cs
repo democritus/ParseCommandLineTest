@@ -70,21 +70,40 @@ namespace ParseCommandLineTest
 
             // Pass the inner args to a .NET and C++ program to test how they are handled.
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            string currentExePath = entryAssembly.Location;
-            string workingDir = Path.GetDirectoryName(currentExePath);
-            string cppExePath = Path.Combine(workingDir, "CppConsole.exe");
-            string assemblyName = entryAssembly.GetName().Name;
-            Process[] runningProcesses = Process.GetProcessesByName(assemblyName);
+            string dotNetAssemblyName = entryAssembly.GetName().Name;
+            string cppAssemblyName = "CppConsole";
+            string dotNetExePath = entryAssembly.Location;
+            string workingDir = Path.GetDirectoryName(dotNetExePath);
+            string cppExePath = Path.Combine(workingDir, $"{cppAssemblyName}.exe");
+            Process[] runningProcesses = Process.GetProcessesByName(dotNetAssemblyName);
             if (sInnerArgs != null
                 && runningProcesses.Length < 10) //prevent infinite recursion madness!
             {
-                Process.Start(currentExePath, sInnerArgs); //.NET program
+                Process.Start(dotNetExePath, sInnerArgs); //.NET program
                 Process.Start(cppExePath, sInnerArgs); // C++ program
             }
             Console.WriteLine("\nPress ENTER to exit...\n");
             do
             {
             } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+
+            // Close process related to this test.
+            List<Process> processesToClose = new List<Process>();
+            foreach (Process p in Process.GetProcessesByName(dotNetAssemblyName))
+            {
+                if (p.Id != Process.GetCurrentProcess().Id)
+                {
+                    processesToClose.Add(p);
+                }
+            }
+            processesToClose.AddRange(Process.GetProcessesByName(cppAssemblyName));
+            try
+            {
+                processesToClose.ForEach(x => x.CloseMainWindow());
+            }
+            catch
+            {
+            }
         }
     }
 }
